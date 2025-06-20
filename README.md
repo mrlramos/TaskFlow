@@ -1,6 +1,6 @@
-# Task Management System
+# TaskFlow
 
-A simple task management application built with Node.js, PostgreSQL, RabbitMQ, and React for learning purposes.
+A modern task management system with async workflow capabilities, built with Node.js, PostgreSQL, RabbitMQ, and React for learning purposes.
 
 ## 📋 Project Overview
 

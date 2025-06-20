@@ -1,7 +1,7 @@
 {
-  "name": "task-management-api",
+  "name": "taskflow-api",
   "version": "1.0.0",
-  "description": "Simple API for task management",
+  "description": "TaskFlow - A modern task management system with async workflow capabilities",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

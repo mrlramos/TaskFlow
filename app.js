@@ -36,8 +36,9 @@ let nextId = 3;
 // Basic test route
 app.get('/', (req, res) => {
   res.json({ 
-    message: 'Hello World! 🚀', 
-    status: 'API running!' 
+    message: 'Welcome to TaskFlow! 🚀', 
+    status: 'API running!',
+    version: '1.0.0'
   });
 });
 
@@ -164,7 +165,7 @@ app.delete('/tasks/:id', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 TaskFlow API running at http://localhost:${PORT}`);
   console.log(`✅ Visit http://localhost:${PORT} to test`);
 });
 
