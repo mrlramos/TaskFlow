@@ -1,6 +1,6 @@
-# Task Management System
+# TaskFlow
 
-A simple task management application built with Node.js, PostgreSQL, RabbitMQ, and React for learning purposes.
+A modern task management system with async workflow capabilities, built with Node.js, PostgreSQL, RabbitMQ, and React for learning purposes.
 
 ## 📋 Project Overview
 
@@ -18,6 +18,26 @@ This is a full-stack CRUD application where users can create, read, update, and 
 - **Message Queue**: RabbitMQ (for async notifications)
 - **Frontend**: React
 
+## 🏗️ Architecture
+
+The application follows **Clean Architecture** and **SOLID principles** with a modular structure:
+
+```
+src/
+├── controllers/     # HTTP request handlers
+│   └── task.controller.js
+├── services/        # Business logic layer
+│   └── task.service.js
+└── routes/          # Route definitions
+    └── task.routes.js
+```
+
+### Design Patterns Used:
+- **MVC Pattern**: Separation of concerns with Models, Views, and Controllers
+- **Service Layer**: Business logic isolated from HTTP concerns
+- **Dependency Injection**: Controllers depend on services, not data layer directly
+- **Single Responsibility**: Each class has one reason to change
+
 ## 🚀 Development Steps
 
 ### ✅ Phase 1: Basic API (COMPLETED)
@@ -25,6 +45,9 @@ This is a full-stack CRUD application where users can create, read, update, and 
 - [x] CRUD routes with mock data
 - [x] Basic validation
 - [x] Health check endpoint
+- [x] **Clean Architecture implementation**
+- [x] **Modular structure (Controllers, Services, Routes)**
+- [x] **SOLID principles following**
 
 ### 🔄 Phase 2: Database Integration (NEXT)
 - [ ] PostgreSQL setup
@@ -66,8 +89,48 @@ curl http://localhost:3000/tasks
 | DELETE | `/tasks/:id` | Delete task |
 | GET | `/health` | Health check |
 
+## 🧪 Testing
+
+### Using Insomnia REST Client
+
+Import the provided collection for easy API testing:
+
+1. Import `insomnia-collection.json` into Insomnia
+2. The collection includes all endpoints with example requests
+3. Base URL is pre-configured to `http://localhost:3000`
+4. Test data examples are included for POST/PUT requests
+
+### Manual Testing
+
+```bash
+# Get all tasks
+curl http://localhost:3000/tasks
+
+# Create a new task
+curl -X POST http://localhost:3000/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Test Task","description":"Test description","priority":"high"}'
+
+# Get specific task
+curl http://localhost:3000/tasks/1
+
+# Update task
+curl -X PUT http://localhost:3000/tasks/1 \
+  -H "Content-Type: application/json" \
+  -d '{"status":"completed"}'
+
+# Delete task
+curl -X DELETE http://localhost:3000/tasks/1
+```
+
 ## 🎯 Current Status
 
-**Phase 1 completed** - Basic API with mock data is running and fully functional.
+**Phase 1 completed** - Clean Architecture API with modular structure is running and fully functional.
+
+**Key achievements:**
+- ✅ SOLID principles implementation
+- ✅ Clean separation of concerns (Controller → Service → Data)
+- ✅ Industry-standard folder structure
+- ✅ Comprehensive API testing setup
 
 **Next step**: Setting up PostgreSQL + Sequelize for persistent data storage.

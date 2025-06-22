@@ -1,0 +1,183 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-12-22T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "req_root",
+      "parentId": "wrk_taskflow",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}",
+      "name": "Root - Welcome",
+      "description": "Basic welcome route",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1703203200000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_health",
+      "parentId": "wrk_taskflow",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/health",
+      "name": "Health Check",
+      "description": "Check API health",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1703203199000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_all_tasks",
+      "parentId": "fld_tasks",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/tasks",
+      "name": "Get All Tasks",
+      "description": "List all tasks",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1703203198000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_task_by_id",
+      "parentId": "fld_tasks",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/tasks/{{ _.task_id }}",
+      "name": "Get Task by ID",
+      "description": "Search task by ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1703203197000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_task",
+      "parentId": "fld_tasks",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/tasks",
+      "name": "Create Task",
+      "description": "Create new task",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"New Task\",\n  \"description\": \"Description of the new task\",\n  \"status\": \"pending\",\n  \"priority\": \"medium\",\n  \"dueDate\": \"2024-12-31\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703203196000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_task",
+      "parentId": "fld_tasks",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/tasks/{{ _.task_id }}",
+      "name": "Update Task",
+      "description": "Update existing task",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Updated Task\",\n  \"description\": \"Updated description\",\n  \"status\": \"in-progress\",\n  \"priority\": \"high\",\n  \"dueDate\": \"2024-12-25\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703203195000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_task",
+      "parentId": "fld_tasks",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/tasks/{{ _.task_id }}",
+      "name": "Delete Task",
+      "description": "Delete task",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1703203194000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "fld_tasks",
+      "parentId": "wrk_taskflow",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "name": "Tasks",
+      "description": "CRUD operations for tasks",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703203200000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_taskflow",
+      "parentId": null,
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "name": "TaskFlow API",
+      "description": "Task management API with async functionalities",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_taskflow",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000",
+        "task_id": "1"
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url", "task_id"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1703203200000,
+      "_type": "environment"
+    }
+  ]
+}
