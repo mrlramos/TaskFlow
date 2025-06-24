@@ -1,69 +1,71 @@
-const db = require('../database/connection');
+const { Task } = require('../models');
 
 class TaskService {
   async getAllTasks() {
-    const result = await db.query('SELECT * FROM tasks ORDER BY created_at DESC');
-    return result.rows;
+    return await Task.findAll({
+      order: [['createdAt', 'DESC']]
+    });
   }
 
   async getTaskById(id) {
-    const result = await db.query('SELECT * FROM tasks WHERE id = $1', [id]);
-    return result.rows[0] || null;
+    return await Task.findByPk(id);
   }
 
   async createTask(taskData) {
     const { title, description, status, priority, dueDate } = taskData;
 
-    if (!title) {
-      throw new Error('Title is required');
-    }
-
-    const result = await db.query(
-      `INSERT INTO tasks (title, description, status, priority, due_date) 
-       VALUES ($1, $2, $3, $4, $5) 
-       RETURNING *`,
-      [
+    try {
+      return await Task.create({
         title,
-        description || '',
-        status || 'pending',
-        priority || 'medium',
-        dueDate || null
-      ]
-    );
-
-    return result.rows[0];
+        description: description || '',
+        status: status || 'pending',
+        priority: priority || 'medium',
+        dueDate: dueDate || null
+      });
+    } catch (error) {
+      if (error.name === 'SequelizeValidationError') {
+        throw new Error(error.errors.map(e => e.message).join(', '));
+      }
+      throw error;
+    }
   }
 
   async updateTask(id, taskData) {
-    // First check if task exists
-    const existingTask = await this.getTaskById(id);
-    if (!existingTask) {
+    const task = await Task.findByPk(id);
+    
+    if (!task) {
       return null;
     }
 
     const { title, description, status, priority, dueDate } = taskData;
 
-    const result = await db.query(
-      `UPDATE tasks 
-       SET title = $1, description = $2, status = $3, priority = $4, due_date = $5, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $6 
-       RETURNING *`,
-      [
-        title || existingTask.title,
-        description !== undefined ? description : existingTask.description,
-        status || existingTask.status,
-        priority || existingTask.priority,
-        dueDate !== undefined ? dueDate : existingTask.due_date,
-        id
-      ]
-    );
+    try {
+      await task.update({
+        title: title || task.title,
+        description: description !== undefined ? description : task.description,
+        status: status || task.status,
+        priority: priority || task.priority,
+        dueDate: dueDate !== undefined ? dueDate : task.dueDate
+      });
 
-    return result.rows[0];
+      return task;
+    } catch (error) {
+      if (error.name === 'SequelizeValidationError') {
+        throw new Error(error.errors.map(e => e.message).join(', '));
+      }
+      throw error;
+    }
   }
 
   async deleteTask(id) {
-    const result = await db.query('DELETE FROM tasks WHERE id = $1 RETURNING *', [id]);
-    return result.rows[0] || null;
+    const task = await Task.findByPk(id);
+    
+    if (!task) {
+      return null;
+    }
+
+    await task.destroy();
+    return task;
   }
 }
 

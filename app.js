@@ -1,9 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 const taskRoutes = require('./src/routes/task.routes');
-const db = require('./src/database/connection');
+const db = require('./src/models');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,27 +29,35 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/tasks', taskRoutes);
 
-// Database initialization and server start
+// Database connection and server start
 const startServer = async () => {
   try {
-    // Test database connection (this will create the database if it doesn't exist)
-    try {
-      await db.query('SELECT 1');
-      console.log('✅ Database connected successfully');
-    } catch (err) {
-      if (err.code === '3D000') { // Database does not exist
-        console.log('📝 Database does not exist, please create it manually:');
-        console.log('   psql -U postgres');
-        console.log('   CREATE DATABASE taskflow;');
-        throw new Error('Database "taskflow" does not exist');
-      }
-      throw err;
-    }
+    // Test database connection
+    await db.sequelize.authenticate();
+    console.log('✅ Database connected successfully');
     
-    // Initialize database (create tables)
-    const initSQL = fs.readFileSync(path.join(__dirname, 'src/database/init.sql'), 'utf8');
-    await db.query(initSQL);
-    console.log('✅ Database initialized');
+    // Sync database (force recreate for clean start)
+    await db.sequelize.sync({ force: true });
+    console.log('✅ Database synchronized');
+    
+    // Add sample data
+    await db.Task.bulkCreate([
+      {
+        title: 'Study Node.js',
+        description: 'Learn basic Node.js concepts',
+        status: 'in-progress',
+        priority: 'high',
+        dueDate: '2024-12-30'
+      },
+      {
+        title: 'Setup PostgreSQL',
+        description: 'Install and configure PostgreSQL database',
+        status: 'pending',
+        priority: 'medium',
+        dueDate: '2024-12-25'
+      }
+    ]);
+    console.log('✅ Sample data inserted');
     
     // Start server
     app.listen(PORT, () => {
@@ -60,6 +66,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('❌ Unable to start server:', error);
+    console.error('Make sure PostgreSQL is running and database "taskflow" exists');
     process.exit(1);
   }
 };
