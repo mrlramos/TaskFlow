@@ -1,9 +1,9 @@
 const taskService = require('../services/task.service');
 
 class TaskController {
-  getAllTasks(req, res) {
+  async getAllTasks(req, res) {
     try {
-      const tasks = taskService.getAllTasks();
+      const tasks = await taskService.getAllTasks();
       res.json({
         success: true,
         data: tasks,
@@ -17,10 +17,10 @@ class TaskController {
     }
   }
 
-  getTaskById(req, res) {
+  async getTaskById(req, res) {
     try {
       const id = parseInt(req.params.id);
-      const task = taskService.getTaskById(id);
+      const task = await taskService.getTaskById(id);
       
       if (!task) {
         return res.status(404).json({
@@ -41,9 +41,9 @@ class TaskController {
     }
   }
 
-  createTask(req, res) {
+  async createTask(req, res) {
     try {
-      const newTask = taskService.createTask(req.body);
+      const newTask = await taskService.createTask(req.body);
       res.status(201).json({
         success: true,
         data: newTask
@@ -56,10 +56,10 @@ class TaskController {
     }
   }
 
-  updateTask(req, res) {
+  async updateTask(req, res) {
     try {
       const id = parseInt(req.params.id);
-      const updatedTask = taskService.updateTask(id, req.body);
+      const updatedTask = await taskService.updateTask(id, req.body);
       
       if (!updatedTask) {
         return res.status(404).json({
@@ -80,10 +80,10 @@ class TaskController {
     }
   }
 
-  deleteTask(req, res) {
+  async deleteTask(req, res) {
     try {
       const id = parseInt(req.params.id);
-      const deletedTask = taskService.deleteTask(id);
+      const deletedTask = await taskService.deleteTask(id);
       
       if (!deletedTask) {
         return res.status(404).json({

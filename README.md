@@ -45,9 +45,9 @@ src/
 - [x] CRUD routes with mock data
 - [x] Basic validation
 - [x] Health check endpoint
-- [x] **Clean Architecture implementation**
-- [x] **Modular structure (Controllers, Services, Routes)**
-- [x] **SOLID principles following**
+- [x] Clean Architecture implementation
+- [x] Modular structure (Controllers, Services, Routes)
+- [x] SOLID principles following
 
 ### 🔄 Phase 2: Database Integration (NEXT)
 - [ ] PostgreSQL setup
