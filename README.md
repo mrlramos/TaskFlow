@@ -28,15 +28,27 @@ src/
 │   └── task.controller.js
 ├── services/        # Business logic layer
 │   └── task.service.js
-└── routes/          # Route definitions
-    └── task.routes.js
+├── routes/          # Route definitions
+│   └── task.routes.js
+├── models/          # Database models (Sequelize)
+│   ├── index.js
+│   └── task.model.js
+└── config/          # Configuration files
+    └── database.js
 ```
 
 ### Design Patterns Used:
 - **MVC Pattern**: Separation of concerns with Models, Views, and Controllers
 - **Service Layer**: Business logic isolated from HTTP concerns
+- **Repository Pattern**: Data access through Sequelize ORM
 - **Dependency Injection**: Controllers depend on services, not data layer directly
 - **Single Responsibility**: Each class has one reason to change
+
+### Database Layer:
+- **Sequelize ORM**: Object-relational mapping for PostgreSQL
+- **Model Validations**: Built-in data validation and constraints
+- **Auto-sync**: Automatic table creation and schema updates
+- **Environment Config**: Separate configurations for development/production
 
 ## 🚀 Development Steps
 
@@ -45,37 +57,70 @@ src/
 - [x] CRUD routes with mock data
 - [x] Basic validation
 - [x] Health check endpoint
-- [x] **Clean Architecture implementation**
-- [x] **Modular structure (Controllers, Services, Routes)**
-- [x] **SOLID principles following**
+- [x] Clean Architecture implementation
+- [x] Modular structure (Controllers, Services, Routes)
+- [x] SOLID principles following
 
-### 🔄 Phase 2: Database Integration (NEXT)
-- [ ] PostgreSQL setup
-- [ ] Sequelize configuration
-- [ ] Database models
-- [ ] Replace mock data with real database
+### ✅ Phase 2: Database Integration (COMPLETED)
+- [x] PostgreSQL setup
+- [x] Sequelize ORM configuration
+- [x] Task model with validations
+- [x] Database connection pooling
+- [x] Environment-based configuration
+- [x] Auto-sync and sample data seeding
+- [x] **Replace mock data with Sequelize ORM**
 
-### 📋 Phase 3: Message Queue (PLANNED)
+### 🔄 Phase 3: Message Queue (NEXT)
 - [ ] RabbitMQ setup
 - [ ] Async notifications
 - [ ] Email notifications for task updates
 
-### 🎨 Phase 4: Frontend (PLANNED)
+### 📋 Phase 4: Frontend (PLANNED)
 - [ ] React application
 - [ ] Task management UI
 - [ ] API integration
 
+### 🐳 Phase 5: Docker & DevOps (PLANNED)
+- [ ] Dockerfile for Node.js application
+- [ ] Docker Compose for full stack (API + PostgreSQL + RabbitMQ)
+- [ ] Multi-stage build optimization
+- [ ] Environment-specific configurations
+- [ ] Health checks and monitoring
+- [ ] Production deployment setup
+
 ## 🏃‍♂️ Quick Start
 
+### Prerequisites
+- Node.js (v16+)
+- PostgreSQL (v12+)
+- Create database: `CREATE DATABASE taskflow;`
+
+### Installation
 ```bash
-# Install dependencies
+# Clone and install dependencies
 npm install
+
+# Configure environment (update .env with your DB credentials)
+cp .env.example .env
 
 # Start development server
 npm run dev
 
 # Test the API
 curl http://localhost:3000/tasks
+```
+
+### Environment Variables
+Create a `.env` file:
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=taskflow
+DB_USER=postgres
+DB_PASS=your_password
+
+NODE_ENV=development
+PORT=3000
 ```
 
 ## 📡 API Endpoints
@@ -125,12 +170,33 @@ curl -X DELETE http://localhost:3000/tasks/1
 
 ## 🎯 Current Status
 
-**Phase 1 completed** - Clean Architecture API with modular structure is running and fully functional.
+**Phase 2 completed** - Full-stack API with PostgreSQL + Sequelize ORM is running and fully functional.
 
 **Key achievements:**
 - ✅ SOLID principles implementation
-- ✅ Clean separation of concerns (Controller → Service → Data)
-- ✅ Industry-standard folder structure
-- ✅ Comprehensive API testing setup
+- ✅ Clean separation of concerns (Controller → Service → Model → Database)
+- ✅ Industry-standard folder structure with proper naming conventions
+- ✅ Sequelize ORM with validations and relationships
+- ✅ Environment-based configuration (development/production)
+- ✅ Automatic database sync and sample data seeding
+- ✅ Professional error handling and validation
+- ✅ Comprehensive API testing setup (Insomnia collection)
 
-**Next step**: Setting up PostgreSQL + Sequelize for persistent data storage.
+**Next step**: Implementing RabbitMQ for async message queue functionality.
+
+**Technology Stack:**
+- **Backend**: Node.js + Express.js
+- **Database**: PostgreSQL + Sequelize ORM  
+- **Message Queue**: RabbitMQ (planned)
+- **Frontend**: React (planned)
+- **DevOps**: Docker + Docker Compose (planned)
+- **Architecture**: Clean Architecture + SOLID principles
+- **Validation**: Sequelize built-in validations
+- **Environment**: dotenv configuration management
+
+**Final Goal:** Complete containerized microservices architecture with Docker Compose orchestrating:
+- TaskFlow API (Node.js)
+- PostgreSQL Database
+- RabbitMQ Message Broker
+- React Frontend
+- All services communicating seamlessly in isolated containers

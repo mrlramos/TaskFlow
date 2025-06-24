@@ -1,89 +1,71 @@
-let tasks = [
-  {
-    id: 1,
-    title: "Study Node.js",
-    description: "Learn basic Node.js concepts",
-    status: "in-progress",
-    priority: "high",
-    dueDate: "2024-12-30",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 2,
-    title: "Setup PostgreSQL",
-    description: "Install and configure PostgreSQL database",
-    status: "pending",
-    priority: "medium",
-    dueDate: "2024-12-25",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }
-];
-
-let nextId = 3;
+const { Task } = require('../models');
 
 class TaskService {
-  getAllTasks() {
-    return tasks;
+  async getAllTasks() {
+    return await Task.findAll({
+      order: [['createdAt', 'DESC']]
+    });
   }
 
-  getTaskById(id) {
-    return tasks.find(task => task.id === id);
+  async getTaskById(id) {
+    return await Task.findByPk(id);
   }
 
-  createTask(taskData) {
+  async createTask(taskData) {
     const { title, description, status, priority, dueDate } = taskData;
 
-    if (!title) {
-      throw new Error('Title is required');
+    try {
+      return await Task.create({
+        title,
+        description: description || '',
+        status: status || 'pending',
+        priority: priority || 'medium',
+        dueDate: dueDate || null
+      });
+    } catch (error) {
+      if (error.name === 'SequelizeValidationError') {
+        throw new Error(error.errors.map(e => e.message).join(', '));
+      }
+      throw error;
     }
-
-    const newTask = {
-      id: nextId++,
-      title,
-      description: description || '',
-      status: status || 'pending',
-      priority: priority || 'medium',
-      dueDate: dueDate || null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-
-    tasks.push(newTask);
-    return newTask;
   }
 
-  updateTask(id, taskData) {
-    const taskIndex = tasks.findIndex(task => task.id === id);
+  async updateTask(id, taskData) {
+    const task = await Task.findByPk(id);
     
-    if (taskIndex === -1) {
+    if (!task) {
       return null;
     }
 
     const { title, description, status, priority, dueDate } = taskData;
 
-    tasks[taskIndex] = {
-      ...tasks[taskIndex],
-      title: title || tasks[taskIndex].title,
-      description: description !== undefined ? description : tasks[taskIndex].description,
-      status: status || tasks[taskIndex].status,
-      priority: priority || tasks[taskIndex].priority,
-      dueDate: dueDate !== undefined ? dueDate : tasks[taskIndex].dueDate,
-      updatedAt: new Date().toISOString()
-    };
+    try {
+      await task.update({
+        title: title || task.title,
+        description: description !== undefined ? description : task.description,
+        status: status || task.status,
+        priority: priority || task.priority,
+        dueDate: dueDate !== undefined ? dueDate : task.dueDate
+      });
 
-    return tasks[taskIndex];
+      return task;
+    } catch (error) {
+      if (error.name === 'SequelizeValidationError') {
+        throw new Error(error.errors.map(e => e.message).join(', '));
+      }
+      throw error;
+    }
   }
 
-  deleteTask(id) {
-    const taskIndex = tasks.findIndex(task => task.id === id);
+  async deleteTask(id) {
+    const task = await Task.findByPk(id);
     
-    if (taskIndex === -1) {
+    if (!task) {
       return null;
     }
 
-    return tasks.splice(taskIndex, 1)[0];
+    await task.destroy();
+    return task;
   }
 }
 
