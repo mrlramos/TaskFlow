@@ -1,4 +1,5 @@
 const { Task } = require('../models');
+const auditService = require('./audit.service');
 
 class TaskService {
   async getAllTasks() {
@@ -15,13 +16,18 @@ class TaskService {
     const { title, description, status, priority, dueDate } = taskData;
 
     try {
-      return await Task.create({
+      const task = await Task.create({
         title,
         description: description || '',
         status: status || 'pending',
         priority: priority || 'medium',
         dueDate: dueDate || null
       });
+
+      // Publish audit event asynchronously
+      auditService.publishTaskCreated(task.toJSON());
+
+      return task;
     } catch (error) {
       if (error.name === 'SequelizeValidationError') {
         throw new Error(error.errors.map(e => e.message).join(', '));
@@ -37,6 +43,8 @@ class TaskService {
       return null;
     }
 
+    // Store old data for audit
+    const oldTaskData = task.toJSON();
     const { title, description, status, priority, dueDate } = taskData;
 
     try {
@@ -47,6 +55,9 @@ class TaskService {
         priority: priority || task.priority,
         dueDate: dueDate !== undefined ? dueDate : task.dueDate
       });
+
+      // Publish audit event asynchronously
+      auditService.publishTaskUpdated(task.toJSON(), oldTaskData);
 
       return task;
     } catch (error) {
@@ -64,7 +75,14 @@ class TaskService {
       return null;
     }
 
+    // Store task data for audit before deletion
+    const taskData = task.toJSON();
+    
     await task.destroy();
+
+    // Publish audit event asynchronously
+    auditService.publishTaskDeleted(taskData);
+
     return task;
   }
 }

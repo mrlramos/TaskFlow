@@ -1,7 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const taskRoutes = require('./src/routes/task.routes');
+const auditRoutes = require('./src/routes/audit.routes');
 const db = require('./src/models');
+const rabbitmq = require('./src/config/rabbitmq');
+const auditService = require('./src/services/audit.service');
+const auditWorker = require('./src/services/audit-worker.service');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +32,7 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/tasks', taskRoutes);
+app.use('/audit', auditRoutes);
 
 // Database connection and server start
 const startServer = async () => {
@@ -39,6 +44,17 @@ const startServer = async () => {
     // Sync database (force recreate for clean start)
     await db.sequelize.sync({ force: true });
     console.log('✅ Database synchronized');
+    
+    // Initialize RabbitMQ connection
+    try {
+      await rabbitmq.connect();
+      await auditService.initialize();
+      await auditWorker.startConsumer();
+      console.log('✅ RabbitMQ audit system initialized');
+    } catch (rabbitmqError) {
+      console.warn('⚠️ RabbitMQ not available - audit system disabled');
+      console.warn('To enable audit logging, make sure RabbitMQ is running on localhost:5672');
+    }
     
     // Add sample data
     await db.Task.bulkCreate([
@@ -63,6 +79,7 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`🚀 TaskFlow API running at http://localhost:${PORT}`);
       console.log(`✅ Visit http://localhost:${PORT} to test`);
+      console.log(`📊 Audit logs available at http://localhost:${PORT}/audit`);
     });
   } catch (error) {
     console.error('❌ Unable to start server:', error);

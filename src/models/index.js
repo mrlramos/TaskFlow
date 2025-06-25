@@ -14,9 +14,21 @@ const sequelize = new Sequelize(
 
 // Load models
 const Task = require('./task.model')(sequelize);
+const AuditLog = require('./audit-log.model')(sequelize);
+
+// Initialize associations
+const models = { Task, AuditLog };
+
+// Set up associations
+Object.keys(models).forEach(modelName => {
+  if (models[modelName].associate) {
+    models[modelName].associate(models);
+  }
+});
 
 // Export database instance with models
 module.exports = {
   sequelize,
-  Task
+  Task,
+  AuditLog
 };

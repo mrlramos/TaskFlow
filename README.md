@@ -70,19 +70,29 @@ src/
 - [x] Auto-sync and sample data seeding
 - [x] **Replace mock data with Sequelize ORM**
 
-### 🔄 Phase 3: Message Queue (NEXT)
-- [ ] RabbitMQ setup
-- [ ] Async notifications
-- [ ] Email notifications for task updates
+### ✅ Phase 3: Message Queue (COMPLETED)
+- [x] RabbitMQ setup with Docker
+- [x] Async audit logging system
+- [x] Task history tracking with full CRUD audit
+- [x] Audit logs API endpoints
+- [x] RabbitMQ management interface integration
 
 ### 📋 Phase 4: Frontend (PLANNED)
 - [ ] React application
 - [ ] Task management UI
 - [ ] API integration
 
-### 🐳 Phase 5: Docker & DevOps (PLANNED)
+### 📊 Phase 5: Observability & Monitoring (PLANNED)
+- [ ] ELK Stack setup (Elasticsearch + Logstash + Kibana)
+- [ ] Centralized logging with structured logs
+- [ ] Custom dashboards for task metrics
+- [ ] Real-time audit log visualization
+- [ ] Application performance monitoring (APM)
+- [ ] Alert system for critical events
+
+### 🐳 Phase 6: Docker & DevOps (PLANNED)
 - [ ] Dockerfile for Node.js application
-- [ ] Docker Compose for full stack (API + PostgreSQL + RabbitMQ)
+- [ ] Docker Compose for full stack (API + PostgreSQL + RabbitMQ + ELK)
 - [ ] Multi-stage build optimization
 - [ ] Environment-specific configurations
 - [ ] Health checks and monitoring
@@ -93,6 +103,7 @@ src/
 ### Prerequisites
 - Node.js (v16+)
 - PostgreSQL (v12+)
+- RabbitMQ (via Docker or native install)
 - Create database: `CREATE DATABASE taskflow;`
 
 ### Installation
@@ -103,11 +114,17 @@ npm install
 # Configure environment (update .env with your DB credentials)
 cp .env.example .env
 
+# Start RabbitMQ (Docker - recommended)
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+
 # Start development server
 npm run dev
 
 # Test the API
 curl http://localhost:3000/tasks
+
+# Test audit system
+curl http://localhost:3000/audit
 ```
 
 ### Environment Variables
@@ -125,6 +142,7 @@ PORT=3000
 
 ## 📡 API Endpoints
 
+### Task Management
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/tasks` | List all tasks |
@@ -132,6 +150,17 @@ PORT=3000
 | GET | `/tasks/:id` | Get task by ID |
 | PUT | `/tasks/:id` | Update task |
 | DELETE | `/tasks/:id` | Delete task |
+
+### Audit System  
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/audit` | List all audit logs |
+| GET | `/audit/summary` | Get audit statistics |
+| GET | `/audit/task/:taskId` | Get audit logs for specific task |
+
+### System
+| Method | Endpoint | Description |
+|--------|----------|-------------|
 | GET | `/health` | Health check |
 
 ## 🧪 Testing
@@ -194,9 +223,12 @@ curl -X DELETE http://localhost:3000/tasks/1
 - **Validation**: Sequelize built-in validations
 - **Environment**: dotenv configuration management
 
-**Final Goal:** Complete containerized microservices architecture with Docker Compose orchestrating:
-- TaskFlow API (Node.js)
-- PostgreSQL Database
-- RabbitMQ Message Broker
-- React Frontend
-- All services communicating seamlessly in isolated containers
+**Final Goal:** Complete containerized microservices architecture with full observability stack:
+- **TaskFlow API** (Node.js) 
+- **PostgreSQL** Database
+- **RabbitMQ** Message Broker
+- **React** Frontend
+- **ELK Stack** (Elasticsearch + Logstash + Kibana) for observability
+- **Docker Compose** orchestrating all services
+- **Real-time monitoring** and **centralized logging**
+- **Production-ready** deployment with health checks and alerts
