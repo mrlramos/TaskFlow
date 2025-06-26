@@ -77,38 +77,66 @@ src/
 - [x] Audit logs API endpoints
 - [x] RabbitMQ management interface integration
 
-### 📋 Phase 4: Frontend (PLANNED)
+### 🐳 Phase 4: Docker & DevOps (IN PROGRESS)
+- [x] Dockerfile for Node.js application
+- [ ] Docker Compose for full stack (API + PostgreSQL + RabbitMQ)
+- [ ] Multi-stage build optimization
+- [ ] Environment-specific configurations
+- [ ] Health checks and monitoring
+- [ ] Integration testing with containerized services
+- [ ] Production-ready deployment setup
+
+### 📋 Phase 5: Frontend (PLANNED)
 - [ ] React application
 - [ ] Task management UI
 - [ ] API integration
+- [ ] Docker integration for frontend
 
-### 📊 Phase 5: Observability & Monitoring (PLANNED)
+### 📊 Phase 6: Observability & Monitoring (PLANNED)
 - [ ] ELK Stack setup (Elasticsearch + Logstash + Kibana)
 - [ ] Centralized logging with structured logs
 - [ ] Custom dashboards for task metrics
 - [ ] Real-time audit log visualization
 - [ ] Application performance monitoring (APM)
 - [ ] Alert system for critical events
-
-### 🐳 Phase 6: Docker & DevOps (PLANNED)
-- [ ] Dockerfile for Node.js application
-- [ ] Docker Compose for full stack (API + PostgreSQL + RabbitMQ + ELK)
-- [ ] Multi-stage build optimization
-- [ ] Environment-specific configurations
-- [ ] Health checks and monitoring
-- [ ] Production deployment setup
+- [ ] Docker Compose integration with ELK stack
 
 ## 🏃‍♂️ Quick Start
 
-### Prerequisites
+### 🐳 Docker Compose (Recommended)
+Complete stack with one command:
+```bash
+# Start all services (API + PostgreSQL + RabbitMQ)
+docker-compose up
+
+# Or run in background
+docker-compose up -d
+
+# Test the API
+curl http://localhost:3000/health
+curl http://localhost:3000/tasks
+```
+
+**Access Points:**
+- **API**: http://localhost:3000
+- **RabbitMQ Management**: http://localhost:15672 (user: `taskflow_user`, pass: `taskflow_pass`)
+- **PostgreSQL**: localhost:5432 (database: `taskflow`)
+
+### 🔧 Manual Setup (Alternative)
+If you prefer running services manually:
+
+#### Prerequisites
 - Node.js (v16+)
 - PostgreSQL (v12+)
 - RabbitMQ (via Docker or native install)
 - Create database: `CREATE DATABASE taskflow;`
 
-### Installation
+#### Installation
 ```bash
-# Clone and install dependencies
+# Navigate to API directory
+cd taskflow-api
+
+# Install dependencies
 npm install
 
 # Configure environment (update .env with your DB credentials)
@@ -127,8 +155,8 @@ curl http://localhost:3000/tasks
 curl http://localhost:3000/audit
 ```
 
-### Environment Variables
-Create a `.env` file:
+#### Environment Variables
+Create a `.env` file in `taskflow-api/`:
 ```env
 DB_HOST=localhost
 DB_PORT=5432
@@ -165,11 +193,33 @@ PORT=3000
 
 ## 🧪 Testing
 
+### 🐳 Docker Compose Testing
+```bash
+# Start all services
+docker-compose up -d
+
+# Wait for services to be healthy (30-60 seconds)
+docker-compose ps
+
+# Test API endpoints
+curl http://localhost:3000/health
+curl http://localhost:3000/tasks
+curl http://localhost:3000/audit
+
+# View logs
+docker-compose logs -f api
+docker-compose logs -f postgres
+docker-compose logs -f rabbitmq
+
+# Stop services
+docker-compose down
+```
+
 ### Using Insomnia REST Client
 
 Import the provided collection for easy API testing:
 
-1. Import `insomnia-collection.json` into Insomnia
+1. Import `taskflow-api/insomnia-collection.json` into Insomnia
 2. The collection includes all endpoints with example requests
 3. Base URL is pre-configured to `http://localhost:3000`
 4. Test data examples are included for POST/PUT requests
@@ -197,9 +247,42 @@ curl -X PUT http://localhost:3000/tasks/1 \
 curl -X DELETE http://localhost:3000/tasks/1
 ```
 
+## 🔧 Docker Commands
+
+### Service Management
+```bash
+# Start services
+docker-compose up
+
+# Stop services
+docker-compose down
+
+# Restart specific service
+docker-compose restart api
+
+# Rebuild after code changes
+docker-compose build api
+docker-compose up api
+
+# Clean reset (removes volumes)
+docker-compose down -v
+```
+
+### Development
+```bash
+# View real-time logs
+docker-compose logs -f api
+
+# Connect to PostgreSQL
+docker-compose exec postgres psql -U taskflow_user -d taskflow
+
+# Check service health
+docker-compose ps
+```
+
 ## 🎯 Current Status
 
-**Phase 2 completed** - Full-stack API with PostgreSQL + Sequelize ORM is running and fully functional.
+**Phase 3 completed** - Full-stack API with PostgreSQL + Sequelize ORM + RabbitMQ audit system is running and fully functional.
 
 **Key achievements:**
 - ✅ SOLID principles implementation
@@ -210,8 +293,11 @@ curl -X DELETE http://localhost:3000/tasks/1
 - ✅ Automatic database sync and sample data seeding
 - ✅ Professional error handling and validation
 - ✅ Comprehensive API testing setup (Insomnia collection)
+- ✅ RabbitMQ async audit system with full CRUD tracking
+- ✅ Message queue integration with task lifecycle events
+- ✅ Audit logs API with history tracking
 
-**Next step**: Implementing RabbitMQ for async message queue functionality.
+**Next step**: Containerizing the application with Docker for easier deployment and testing of the integrated services (Node.js + PostgreSQL + RabbitMQ).
 
 **Technology Stack:**
 - **Backend**: Node.js + Express.js
