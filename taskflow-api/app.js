@@ -41,9 +41,9 @@ const startServer = async () => {
     await db.sequelize.authenticate();
     console.log('✅ Database connected successfully');
     
-    // Sync database (force recreate for clean start)
-    await db.sequelize.sync({ force: true });
-    console.log('✅ Database synchronized');
+    // Sync database models with existing tables (no force to preserve data)
+    await db.sequelize.sync({ alter: false });
+    console.log('✅ Database models synchronized with existing tables');
     
     // Initialize RabbitMQ connection
     try {
@@ -56,24 +56,8 @@ const startServer = async () => {
       console.warn('To enable audit logging, make sure RabbitMQ is running on localhost:5672');
     }
     
-    // Add sample data
-    await db.Task.bulkCreate([
-      {
-        title: 'Study Node.js',
-        description: 'Learn basic Node.js concepts',
-        status: 'in-progress',
-        priority: 'high',
-        dueDate: '2024-12-30'
-      },
-      {
-        title: 'Setup PostgreSQL',
-        description: 'Install and configure PostgreSQL database',
-        status: 'pending',
-        priority: 'medium',
-        dueDate: '2024-12-25'
-      }
-    ]);
-    console.log('✅ Sample data inserted');
+    // Database is pre-populated via init-db SQL scripts
+    console.log('✅ Using pre-loaded database data from PostgreSQL initialization scripts');
     
     // Start server
     app.listen(PORT, () => {
