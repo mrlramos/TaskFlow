@@ -10,6 +10,19 @@ const auditWorker = require('./src/services/audit-worker.service');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CORS middleware for frontend communication
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 // Middleware for JSON parsing
 app.use(express.json());
 
@@ -30,9 +43,9 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Routes
-app.use('/tasks', taskRoutes);
-app.use('/audit', auditRoutes);
+// API Routes with /api prefix
+app.use('/api/tasks', taskRoutes);
+app.use('/api/audit', auditRoutes);
 
 // Database connection and server start
 const startServer = async () => {

@@ -1,12 +1,88 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2025-06-26T22:00:00.000Z",
+  "__export_date": "2025-06-28T23:30:00.000Z",
   "__export_source": "insomnia.desktop.app:v2023.5.8",
   "resources": [
     {
-      "_id": "req_root",
+      "_id": "wrk_taskflow",
+      "parentId": null,
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "name": "TaskFlow API - Complete Collection",
+      "description": "Full TaskFlow API with React Frontend Integration",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
       "parentId": "wrk_taskflow",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000",
+        "task_id": "1"
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url", "task_id"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1703203200000,
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_basic",
+      "parentId": "wrk_taskflow",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "name": "🚀 Basic Routes",
+      "description": "Basic API routes",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703203200000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_tasks",
+      "parentId": "wrk_taskflow",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "name": "📋 Tasks CRUD",
+      "description": "Complete CRUD operations for tasks",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703203199000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_audit",
+      "parentId": "wrk_taskflow",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "name": "📊 Audit System",
+      "description": "Audit logs and tracking",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703203198000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_frontend_test",
+      "parentId": "wrk_taskflow",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "name": "🎨 Frontend Integration Tests",
+      "description": "Tests that mirror frontend requests",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703203197000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_root",
+      "parentId": "fld_basic",
       "modified": 1703203200000,
       "created": 1703203200000,
       "url": "{{ _.base_url }}",
@@ -23,7 +99,7 @@
     },
     {
       "_id": "req_health",
-      "parentId": "wrk_taskflow",
+      "parentId": "fld_basic",
       "modified": 1703203200000,
       "created": 1703203200000,
       "url": "{{ _.base_url }}/health",
@@ -43,9 +119,9 @@
       "parentId": "fld_tasks",
       "modified": 1703203200000,
       "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks",
+      "url": "{{ _.base_url }}/api/tasks",
       "name": "Get All Tasks",
-      "description": "List all tasks",
+      "description": "List all tasks - Main frontend call",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -60,7 +136,7 @@
       "parentId": "fld_tasks",
       "modified": 1703203200000,
       "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks/{{ _.task_id }}",
+      "url": "{{ _.base_url }}/api/tasks/{{ _.task_id }}",
       "name": "Get Task by ID",
       "description": "Search task by ID",
       "method": "GET",
@@ -77,13 +153,13 @@
       "parentId": "fld_tasks",
       "modified": 1703203200000,
       "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks",
+      "url": "{{ _.base_url }}/api/tasks",
       "name": "Create Task",
-      "description": "Create new task",
+      "description": "Create new task - Frontend form submission",
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"title\": \"New Task\",\n  \"description\": \"Description of the new task\",\n  \"status\": \"pending\",\n  \"priority\": \"medium\",\n  \"dueDate\": \"2024-12-31\"\n}"
+        "text": "{\n  \"title\": \"Complete API Integration\",\n  \"description\": \"Connect React frontend with Node.js API\",\n  \"status\": \"pending\",\n  \"priority\": \"high\",\n  \"dueDate\": \"2024-12-31\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -102,13 +178,13 @@
       "parentId": "fld_tasks",
       "modified": 1703203200000,
       "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks/{{ _.task_id }}",
+      "url": "{{ _.base_url }}/api/tasks/{{ _.task_id }}",
       "name": "Update Task",
-      "description": "Update existing task",
+      "description": "Update existing task - Frontend edit form",
       "method": "PUT",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Updated Task\",\n  \"description\": \"Updated description\",\n  \"status\": \"in-progress\",\n  \"priority\": \"high\",\n  \"dueDate\": \"2024-12-25\"\n}"
+        "text": "{\n  \"title\": \"Updated Task Title\",\n  \"description\": \"Updated description from React form\",\n  \"status\": \"in-progress\",\n  \"priority\": \"medium\",\n  \"dueDate\": \"2024-12-25\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -123,13 +199,38 @@
       "_type": "request"
     },
     {
+      "_id": "req_update_task_status",
+      "parentId": "fld_tasks",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/api/tasks/{{ _.task_id }}",
+      "name": "Update Task Status Only",
+      "description": "Update just the status - Frontend dropdown change",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"completed\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703203194500,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
       "_id": "req_delete_task",
       "parentId": "fld_tasks",
       "modified": 1703203200000,
       "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks/{{ _.task_id }}",
+      "url": "{{ _.base_url }}/api/tasks/{{ _.task_id }}",
       "name": "Delete Task",
-      "description": "Delete task",
+      "description": "Delete task - Frontend delete button",
       "method": "DELETE",
       "body": {},
       "parameters": [],
@@ -140,21 +241,16 @@
       "_type": "request"
     },
     {
-      "_id": "req_tasks_by_status",
-      "parentId": "fld_tasks_advanced",
+      "_id": "req_get_audit_logs",
+      "parentId": "fld_audit",
       "modified": 1703203200000,
       "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks",
-      "name": "Filter by Status",
-      "description": "Get tasks by status",
+      "url": "{{ _.base_url }}/api/audit",
+      "name": "Get All Audit Logs",
+      "description": "List all audit logs",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "name": "status",
-          "value": "pending"
-        }
-      ],
+      "parameters": [],
       "headers": [],
       "authentication": {},
       "metaSortKey": -1703203193000,
@@ -162,21 +258,16 @@
       "_type": "request"
     },
     {
-      "_id": "req_tasks_by_priority",
-      "parentId": "fld_tasks_advanced",
+      "_id": "req_audit_by_task",
+      "parentId": "fld_audit",
       "modified": 1703203200000,
       "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks",
-      "name": "Filter by Priority",
-      "description": "Get tasks by priority",
+      "url": "{{ _.base_url }}/api/audit?taskId={{ _.task_id }}",
+      "name": "Get Audit Logs by Task",
+      "description": "Get audit logs for specific task",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "name": "priority",
-          "value": "high"
-        }
-      ],
+      "parameters": [],
       "headers": [],
       "authentication": {},
       "metaSortKey": -1703203192000,
@@ -184,13 +275,125 @@
       "_type": "request"
     },
     {
-      "_id": "req_create_task_validation",
-      "parentId": "fld_tasks_advanced",
+      "_id": "req_frontend_load_tasks",
+      "parentId": "fld_frontend_test",
       "modified": 1703203200000,
       "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks",
-      "name": "Create Task - Validation Test",
-      "description": "Test validation errors",
+      "url": "{{ _.base_url }}/api/tasks",
+      "name": "Frontend - Load Tasks",
+      "description": "Simulate React app loading tasks on startup",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Origin",
+          "value": "http://localhost:3001"
+        },
+        {
+          "name": "Referer",
+          "value": "http://localhost:3001/"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703203191000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_frontend_create_task",
+      "parentId": "fld_frontend_test",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/api/tasks",
+      "name": "Frontend - Create Task",
+      "description": "Simulate React form submission",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Learn React Hooks\",\n  \"description\": \"Master useState and useEffect\",\n  \"status\": \"pending\",\n  \"priority\": \"high\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Origin",
+          "value": "http://localhost:3001"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703203190000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_frontend_search",
+      "parentId": "fld_frontend_test",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/api/tasks",
+      "name": "Frontend - Search Tasks",
+      "description": "Simulate search functionality",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "search",
+          "value": "React"
+        }
+      ],
+      "headers": [
+        {
+          "name": "Origin",
+          "value": "http://localhost:3001"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703203189000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_cors_preflight",
+      "parentId": "fld_frontend_test",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/api/tasks",
+      "name": "CORS Preflight Check",
+      "description": "Test CORS configuration",
+      "method": "OPTIONS",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Origin",
+          "value": "http://localhost:3001"
+        },
+        {
+          "name": "Access-Control-Request-Method",
+          "value": "POST"
+        },
+        {
+          "name": "Access-Control-Request-Headers",
+          "value": "Content-Type"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703203188000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_validation_test",
+      "parentId": "fld_frontend_test",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/api/tasks",
+      "name": "Frontend - Validation Errors",
+      "description": "Test form validation errors",
       "method": "POST",
       "body": {
         "mimeType": "application/json",
@@ -201,272 +404,16 @@
         {
           "name": "Content-Type",
           "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1703203191000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_create_realistic_task",
-      "parentId": "fld_tasks_advanced",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks",
-      "name": "Create Realistic Task",
-      "description": "Create a realistic development task",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Implement JWT Authentication\",\n  \"description\": \"Add JWT token-based authentication to protect API endpoints. Include login/logout functionality and middleware for route protection.\",\n  \"status\": \"pending\",\n  \"priority\": \"high\",\n  \"dueDate\": \"2025-01-15T18:00:00.000Z\"\n}"
-      },
-      "parameters": [],
-      "headers": [
+        },
         {
-          "name": "Content-Type",
-          "value": "application/json"
+          "name": "Origin",
+          "value": "http://localhost:3001"
         }
       ],
-      "authentication": {},
-      "metaSortKey": -1703203190000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_get_all_audits",
-      "parentId": "fld_audits",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "url": "{{ _.base_url }}/audit",
-      "name": "Get All Audit Logs",
-      "description": "List all audit logs",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1703203189000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_get_audits_by_task",
-      "parentId": "fld_audits",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "url": "{{ _.base_url }}/audit",
-      "name": "Get Audits by Task ID",
-      "description": "Get audit logs for specific task",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "name": "taskId",
-          "value": "{{ _.task_id }}"
-        }
-      ],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1703203188000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_get_audits_by_action",
-      "parentId": "fld_audits",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "url": "{{ _.base_url }}/audit",
-      "name": "Get Audits by Action",
-      "description": "Filter audit logs by action type",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "name": "action",
-          "value": "CREATE"
-        }
-      ],
-      "headers": [],
       "authentication": {},
       "metaSortKey": -1703203187000,
       "isPrivate": false,
       "_type": "request"
-    },
-    {
-      "_id": "req_get_recent_audits",
-      "parentId": "fld_audits",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "url": "{{ _.base_url }}/audit",
-      "name": "Get Recent Audits (Last 24h)",
-      "description": "Get audit logs from last 24 hours",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "name": "since",
-          "value": "24h"
-        }
-      ],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1703203186000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_complete_task_flow",
-      "parentId": "fld_test_scenarios",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks/{{ _.completed_task_id }}",
-      "name": "Complete Task Flow",
-      "description": "Update task to completed status",
-      "method": "PUT",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Setup Development Environment\",\n  \"description\": \"Configure Docker containers, databases, and development tools for the project - COMPLETED!\",\n  \"status\": \"completed\",\n  \"priority\": \"high\",\n  \"dueDate\": \"2024-01-15T10:00:00.000Z\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1703203185000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_start_task_progress",
-      "parentId": "fld_test_scenarios",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "url": "{{ _.base_url }}/tasks/{{ _.pending_task_id }}",
-      "name": "Start Task Progress",
-      "description": "Change task status to in-progress",
-      "method": "PUT",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Create API Documentation\",\n  \"description\": \"Generate comprehensive API documentation using Swagger/OpenAPI specifications - IN PROGRESS\",\n  \"status\": \"in-progress\",\n  \"priority\": \"medium\",\n  \"dueDate\": \"2024-01-25T15:30:00.000Z\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1703203184000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "fld_tasks",
-      "parentId": "wrk_taskflow",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "name": "📋 Tasks - Basic CRUD",
-      "description": "Basic CRUD operations for tasks",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1703203200000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "fld_tasks_advanced",
-      "parentId": "wrk_taskflow",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "name": "🔍 Tasks - Advanced & Filters",
-      "description": "Advanced queries, filters and validation tests",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1703203199000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "fld_audits",
-      "parentId": "wrk_taskflow",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "name": "🔍 Audit Logs",
-      "description": "Audit logging and history tracking",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1703203198000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "fld_test_scenarios",
-      "parentId": "wrk_taskflow",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "name": "🎯 Test Scenarios",
-      "description": "Complete workflow testing scenarios",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1703203197000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "wrk_taskflow",
-      "parentId": null,
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "name": "🚀 TaskFlow API - Complete Testing Suite",
-      "description": "Complete task management API with async audit logging. Includes CRUD operations, filtering, validation tests, audit tracking, and workflow scenarios. Ready for development and production testing.",
-      "scope": "collection",
-      "_type": "workspace"
-    },
-    {
-      "_id": "env_base",
-      "parentId": "wrk_taskflow",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "name": "🏠 Local Development",
-      "data": {
-        "base_url": "http://localhost:3000",
-        "task_id": "1",
-        "new_task_id": "11",
-        "completed_task_id": "1",
-        "in_progress_task_id": "2",
-        "pending_task_id": "3"
-      },
-      "dataPropertyOrder": {
-        "&": ["base_url", "task_id", "new_task_id", "completed_task_id", "in_progress_task_id", "pending_task_id"]
-      },
-      "color": "#7d69cb",
-      "isPrivate": false,
-      "metaSortKey": 1703203200000,
-      "_type": "environment"
-    },
-    {
-      "_id": "env_production",
-      "parentId": "wrk_taskflow",
-      "modified": 1703203200000,
-      "created": 1703203200000,
-      "name": "🚀 Production",
-      "data": {
-        "base_url": "https://your-domain.com",
-        "task_id": "1",
-        "new_task_id": "11",
-        "completed_task_id": "1",
-        "in_progress_task_id": "2",
-        "pending_task_id": "3"
-      },
-      "dataPropertyOrder": {
-        "&": ["base_url", "task_id", "new_task_id", "completed_task_id", "in_progress_task_id", "pending_task_id"]
-      },
-      "color": "#d9534f",
-      "isPrivate": false,
-      "metaSortKey": 1703203201000,
-      "_type": "environment"
     }
   ]
 }
