@@ -26,54 +26,65 @@ class AuditService {
     }
   }
 
-  async publishTaskEvent(action, taskData, oldData = null) {
-    try {
-      const channel = rabbitmq.getChannel();
-      
-      const event = {
-        action: action.toUpperCase(), // CREATE, UPDATE, DELETE
-        taskId: taskData.id,
-        newData: taskData,
-        oldData: oldData,
-        timestamp: new Date().toISOString(),
-        userId: null // Future feature
-      };
-
-      const routingKey = `task.${action.toLowerCase()}`;
-      const messageBuffer = Buffer.from(JSON.stringify(event));
-
-      const published = channel.publish(
-        this.exchangeName,
-        routingKey,
-        messageBuffer,
-        { persistent: true }
-      );
-
-      if (published) {
-        console.log(`📢 Published audit event: ${action} for task ${taskData.id}`);
-      } else {
-        console.warn(`⚠️ Failed to publish audit event: ${action} for task ${taskData.id}`);
-      }
-
-      return published;
-    } catch (error) {
-      console.error('❌ Error publishing audit event:', error);
-      // Don't throw - audit failures shouldn't break the main operation
-      return false;
+  // Fire-and-forget async method - doesn't block the main operation
+  publishTaskEvent(action, taskData, oldData = null) {
+    // Check if RabbitMQ is healthy before attempting to publish
+    if (!rabbitmq.isHealthy()) {
+      console.warn(`⚠️ RabbitMQ not available, skipping audit event: ${action} for task ${taskData.id}`);
+      return;
     }
+
+    // Use setImmediate to ensure this runs asynchronously without blocking
+    setImmediate(async () => {
+      try {
+        const channel = rabbitmq.getChannel();
+        
+        const event = {
+          action: action.toUpperCase(), // CREATE, UPDATE, DELETE
+          taskId: taskData.id,
+          newData: taskData,
+          oldData: oldData,
+          timestamp: new Date().toISOString(),
+          userId: null // Future feature
+        };
+
+        const routingKey = `task.${action.toLowerCase()}`;
+        const messageBuffer = Buffer.from(JSON.stringify(event));
+
+        const published = channel.publish(
+          this.exchangeName,
+          routingKey,
+          messageBuffer,
+          { 
+            persistent: true,
+            // Add timeout to prevent hanging
+            timeout: 1000 // 1 second timeout
+          }
+        );
+
+        if (published) {
+          console.log(`📢 Published audit event: ${action} for task ${taskData.id}`);
+        } else {
+          console.warn(`⚠️ Failed to publish audit event: ${action} for task ${taskData.id}`);
+        }
+      } catch (error) {
+        console.error('❌ Error publishing audit event:', error);
+        // Don't throw - audit failures shouldn't break the main operation
+      }
+    });
   }
 
-  // Convenience methods
-  async publishTaskCreated(taskData) {
-    return this.publishTaskEvent('CREATE', taskData);
+  // Convenience methods - all non-blocking
+  publishTaskCreated(taskData) {
+    this.publishTaskEvent('CREATE', taskData);
   }
 
-  async publishTaskUpdated(newTaskData, oldTaskData) {
-    return this.publishTaskEvent('UPDATE', newTaskData, oldTaskData);
+  publishTaskUpdated(newTaskData, oldTaskData) {
+    this.publishTaskEvent('UPDATE', newTaskData, oldTaskData);
   }
 
-  async publishTaskDeleted(taskData) {
-    return this.publishTaskEvent('DELETE', taskData);
+  publishTaskDeleted(taskData) {
+    this.publishTaskEvent('DELETE', taskData);
   }
 }
 
