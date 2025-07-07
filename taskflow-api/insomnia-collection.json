@@ -159,7 +159,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Complete API Integration\",\n  \"description\": \"Connect React frontend with Node.js API\",\n  \"status\": \"pending\",\n  \"priority\": \"high\",\n  \"dueDate\": \"2024-12-31\"\n}"
+        "text": "{\n  \"title\": \"Complete API Integration\",\n  \"description\": \"Connect React frontend with Node.js API\",\n  \"status\": \"pending\",\n  \"priority\": \"high\",\n  \"dueDate\": \"2024-12-31T23:59:59.000Z\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -184,7 +184,7 @@
       "method": "PUT",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Updated Task Title\",\n  \"description\": \"Updated description from React form\",\n  \"status\": \"in-progress\",\n  \"priority\": \"medium\",\n  \"dueDate\": \"2024-12-25\"\n}"
+        "text": "{\n  \"title\": \"Updated Task Title\",\n  \"description\": \"Updated description from React form\",\n  \"status\": \"in-progress\",\n  \"priority\": \"medium\",\n  \"dueDate\": \"2024-12-25T18:00:00.000Z\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -258,13 +258,30 @@
       "_type": "request"
     },
     {
+      "_id": "req_get_audit_summary",
+      "parentId": "fld_audit",
+      "modified": 1703203200000,
+      "created": 1703203200000,
+      "url": "{{ _.base_url }}/api/audit/summary",
+      "name": "Get Audit Summary",
+      "description": "Get audit statistics and summary data",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1703203192500,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
       "_id": "req_audit_by_task",
       "parentId": "fld_audit",
       "modified": 1703203200000,
       "created": 1703203200000,
-      "url": "{{ _.base_url }}/api/audit?taskId={{ _.task_id }}",
+      "url": "{{ _.base_url }}/api/audit/task/{{ _.task_id }}",
       "name": "Get Audit Logs by Task",
-      "description": "Get audit logs for specific task",
+      "description": "Get audit logs for specific task using path parameter",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -335,16 +352,11 @@
       "modified": 1703203200000,
       "created": 1703203200000,
       "url": "{{ _.base_url }}/api/tasks",
-      "name": "Frontend - Search Tasks",
-      "description": "Simulate search functionality",
+      "name": "Frontend - Load All Tasks (NO SEARCH)",
+      "description": "API does not support search - filtering is done client-side in React",
       "method": "GET",
       "body": {},
-      "parameters": [
-        {
-          "name": "search",
-          "value": "React"
-        }
-      ],
+      "parameters": [],
       "headers": [
         {
           "name": "Origin",
